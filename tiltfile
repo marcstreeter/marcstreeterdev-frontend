@@ -1,0 +1,47 @@
+# Frontend service Tiltfile (development only)
+load('ext://configmap', 'configmap_from_dict')
+load('ext://dotenv', 'dotenv')
+
+# CONSTANTS
+DOTENV = dotenv() or {}
+SYSENV = dict(os.environ)
+
+# FUNCTIONS
+def get_env_var(key, default=""):
+    """Get environment variable with priority: dotenv > system env > default"""
+    return DOTENV.get(key, SYSENV.get(key, default))
+
+# Create ConfigMap for frontend environment variables
+k8s_yaml(
+    configmap_from_dict(
+        'marcstreeterdev-frontend-config',
+        inputs={
+            'VITE_API_BASE_URL': get_env_var('VITE_API_BASE_URL', 'http://localhost:18800'),
+            'VITE_APP_VERSION': get_env_var('VITE_APP_VERSION', '1.0.0'),
+        }
+    )
+)
+
+# Build the dev Docker image
+# Assumes Dockerfile is set up for development (Vite dev server)
+docker_build(
+    'react-app',
+    '.',
+    dockerfile='Dockerfile',
+    live_update=[
+        sync('./src', '/app/src'),
+    ]
+)
+
+# Load only this service's manifests (for dev, if you want to use k8s locally)
+k8s_yaml(helm('manifests', values=['manifests/values-dev.yaml']))
+
+# Define the frontend resource
+k8s_resource(
+    'marcstreeterdev-frontend',
+    # HOST:PORT, CONTAINER:PORT
+    port_forwards=[
+        port_forward(17300, 3000, name="frontend-dev"),
+        port_forward(17600, 6006, name="storybook"),
+    ],
+)

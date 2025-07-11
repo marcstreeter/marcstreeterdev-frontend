@@ -1,0 +1,31 @@
+# Development values for marcstreeterdev-frontend
+
+# Global configuration
+global:
+  environment: development
+
+# Development mode enabled (only mode supported)
+dev:
+  enabled: true
+
+# Use development resources
+resources:
+  requests:
+    memory: 512Mi
+    cpu: 250m
+  limits:
+    memory: 1Gi
+    cpu: 500m
+
+# Use development service configuration
+service:
+  port: 3000
+  targetPort: 3000
+
+# Use development build arguments
+buildArgs:
+  ENABLE_TESTING: true
+  ENABLE_LINTING: true
+  ENABLE_DEBUG: true
+
+ 

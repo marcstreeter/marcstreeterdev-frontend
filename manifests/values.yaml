@@ -1,0 +1,72 @@
+# Default values for marcstreeterdev-frontend
+# This is a YAML-formatted file.
+
+# Global configuration
+global:
+  environment: production
+
+# Replica count
+replicaCount: 1
+
+# Image configuration
+image:
+  repository: react-app
+  tag: latest
+  pullPolicy: IfNotPresent
+
+# Build arguments for Docker (development only)
+buildArgs:
+  ENABLE_TESTING: false
+  ENABLE_STORYBOOK: false
+  ENABLE_LINTING: false
+  ENABLE_DEBUG: false
+
+# Service configuration (development only)
+service:
+  type: ClusterIP
+  port: 5173
+  targetPort: 5173
+
+# Ingress configuration
+ingress:
+  enabled: false
+  className: ""
+  annotations: {}
+  hosts:
+    - host: frontend.local
+      paths:
+        - path: /
+          pathType: Prefix
+  tls: []
+
+# Resource limits
+resources:
+  requests:
+    memory: 64Mi
+    cpu: 50m
+  limits:
+    memory: 128Mi
+    cpu: 100m
+
+
+
+# Environment variables
+env: []
+
+# Development configuration (only mode supported)
+dev:
+  enabled: true
+  service:
+    port: 5173
+    targetPort: 5173
+  buildArgs:
+    ENABLE_TESTING: true
+    ENABLE_LINTING: true
+    ENABLE_DEBUG: true
+  resources:
+    requests:
+      memory: 128Mi
+      cpu: 100m
+    limits:
+      memory: 256Mi
+      cpu: 200m 
