@@ -4,9 +4,6 @@ import { describe, it, expect } from 'vitest';
 import { ThemeProvider } from '../ThemeProvider';
 import { Button } from './Button';
 
-// Import test setup for jest-dom matchers
-import '../test-setup';
-
 const renderWithTheme = (component: React.ReactElement) => {
   return render(<ThemeProvider>{component}</ThemeProvider>);
 };
