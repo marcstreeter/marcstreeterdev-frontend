@@ -1,12 +1,25 @@
 # MarcStreeter.dev Frontend
 
+## Requirements
+
+- [Node.js 18.x](https://nodejs.org/)
+- [Docker](https://www.docker.com/)
+- [Tilt](https://docs.tilt.dev/install.html)
+- [kubectl](https://kubernetes.io/docs/tasks/tools/) - for Kubernetes operations
+- [asdf](https://asdf-vm.com) - for local installs (optional, see .tool-versions)
+
 A React + TypeScript + Vite frontend application for MarcStreeter.dev.
 
-## Environment Variables
+## Development
 
-The application uses environment variables for configuration. In development, these are read from the container environment. In production, they are baked in at build time.
+This project uses a justfile for all development tasks.
+### Quick Start
 
-### Development Setup (Optional)
+```bash
+just  # see all available commands
+```
+
+#### Development Configuration (Optional)
 
 Copy `.env.sample` to `.env` and modify the values as needed for your local development:
 
@@ -14,72 +27,6 @@ Copy `.env.sample` to `.env` and modify the values as needed for your local deve
 cp .env.sample .env
 ```
 
-### Production Deployment
+## Production Deployment
 
 In production (GitHub Pages), the application will use the default values unless overridden at build time.
-
-Currently, two official plugins are available:
-
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      ...tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      ...tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      ...tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
-
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
