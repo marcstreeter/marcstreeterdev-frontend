@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import type React from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import {
   Container, Typography, Box, Card, CardContent,
   Chip,
@@ -12,7 +13,7 @@ import {
   Paper,
   TextField
 } from '@mui/material';
-import { CheckCircle, Error, Schedule, Refresh, ExpandMore } from '@mui/icons-material';
+import { CheckCircle, Error as ErrorIcon, Schedule, Refresh, ExpandMore } from '@mui/icons-material';
 import { apiUrl } from '../settings';
 
 interface HealthStatus {
@@ -48,7 +49,7 @@ const StatusPage: React.FC = () => {
     return saved || "give me the name of the main villain's cat in the show the smurfs";
   });
 
-  const checkHealth = async () => {
+  const checkHealth = useCallback(async () => {
     setIsPolling(true);
     const startTime = Date.now();
     
@@ -93,9 +94,9 @@ const StatusPage: React.FC = () => {
     } finally {
       setIsPolling(false);
     }
-  };
+  }, []);
 
-  const checkLLMStatus = async (forceRefresh: boolean = false) => {
+  const checkLLMStatus = useCallback(async (forceRefresh: boolean = false) => {
     setLlmStatus(prev => ({ ...prev, isLoading: true, error: undefined }));
     
     try {
@@ -140,7 +141,7 @@ const StatusPage: React.FC = () => {
         error: errorMessage,
       });
     }
-  };
+  }, [customPrompt]);
 
   const getLLMStatusIcon = (status: string) => {
     switch (status) {
@@ -148,7 +149,7 @@ const StatusPage: React.FC = () => {
         return <CheckCircle color="success" sx={{ fontSize: 20 }} />;
       case 'failed':
       case 'timeout':
-        return <Error color="error" sx={{ fontSize: 20 }} />;
+        return <ErrorIcon color="error" sx={{ fontSize: 20 }} />;
       case 'no request was made because there was no configuration present for this provider':
         return <Schedule color="action" sx={{ fontSize: 20 }} />;
       default:
@@ -156,7 +157,7 @@ const StatusPage: React.FC = () => {
     }
   };
 
-  const getLLMStatusColor = (status: string) => {
+  const getLLMStatusColor = (status: string): 'success' | 'error' | 'warning' | 'default' => {
     switch (status) {
       case 'ok':
         return 'success';
@@ -196,9 +197,9 @@ const StatusPage: React.FC = () => {
     localStorage.setItem('llm-custom-prompt', newPrompt);
   };
 
-  const truncateOutput = (output: string, maxLength: number = 100) => {
+  const _truncateOutput = (output: string, maxLength: number = 100) => {
     if (output.length <= maxLength) return output;
-    return output.substring(0, maxLength) + '...';
+    return `${output.substring(0, maxLength)}...`;
   };
 
   useEffect(() => {
@@ -216,7 +217,7 @@ const StatusPage: React.FC = () => {
       clearInterval(healthInterval);
       clearInterval(llmInterval);
     };
-  }, []);
+  }, [checkHealth, checkLLMStatus]);
 
   const getStatusIcon = () => {
     switch (healthStatus.status) {
@@ -224,7 +225,7 @@ const StatusPage: React.FC = () => {
         return <CheckCircle color="success" sx={{ fontSize: 40 }} />;
       case 'unhealthy':
       case 'error':
-        return <Error color="error" sx={{ fontSize: 40 }} />;
+        return <ErrorIcon color="error" sx={{ fontSize: 40 }} />;
       case 'loading':
         return <CircularProgress size={40} />;
       default:
@@ -232,7 +233,7 @@ const StatusPage: React.FC = () => {
     }
   };
 
-  const getStatusColor = () => {
+  const getStatusColor = (): 'success' | 'error' | 'info' | 'default' => {
     switch (healthStatus.status) {
       case 'healthy':
         return 'success';
@@ -279,7 +280,7 @@ const StatusPage: React.FC = () => {
                 </Typography>
                 <Chip 
                   label={getStatusText()} 
-                  color={getStatusColor() as any}
+                  color={getStatusColor()}
                   variant="outlined"
                 />
               </Box>
@@ -423,7 +424,7 @@ const StatusPage: React.FC = () => {
                         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mt: 0.5 }}>
                           <Chip 
                             label={getLLMStatusText(provider.status)}
-                            color={getLLMStatusColor(provider.status) as any}
+                            color={getLLMStatusColor(provider.status)}
                             size="small"
                             variant="outlined"
                           />
