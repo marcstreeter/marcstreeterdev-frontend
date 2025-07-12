@@ -39,6 +39,8 @@ k8s_yaml(helm('manifests', values=['manifests/values-dev.yaml']))
 # Define the frontend resource
 k8s_resource(
     'marcstreeterdev-frontend',
+    resource_deps=[],
+    labels=['frontend'],
     # HOST:PORT, CONTAINER:PORT
     port_forwards=[
         port_forward(17300, 3000, name="frontend-dev"),
