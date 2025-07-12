@@ -22,7 +22,8 @@ describe('Card', () => {
 
   it('applies custom className', () => {
     renderWithTheme(<Card className="custom-class">Card content</Card>);
-    const card = screen.getByText('Card content').closest('div');
+    // The className is applied to the MuiCard root element, not the text container
+    const card = screen.getByText('Card content').closest('[class*="MuiCard-root"]');
     expect(card).toHaveClass('custom-class');
   });
 }); 
