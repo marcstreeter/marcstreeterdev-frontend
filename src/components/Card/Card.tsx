@@ -1,11 +1,11 @@
-import React from 'react';
 import {
-  Card as MuiCard,
-  CardContent,
   CardActions,
+  CardContent,
+  Card as MuiCard,
   Typography,
 } from '@mui/material';
 import type { CardProps as MuiCardProps } from '@mui/material/Card';
+import React from 'react';
 
 export interface CardProps extends MuiCardProps {
   title?: string;
@@ -39,4 +39,4 @@ export const Card = React.forwardRef<HTMLDivElement, CardProps>(
   }
 );
 
-Card.displayName = 'Card'; 
+Card.displayName = 'Card';

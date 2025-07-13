@@ -78,29 +78,17 @@ test-coverage: _check-tilt
     {{kubexec}} -- npm run test:coverage
 
 # Linting and formatting with Tilt
-lint: _check-tilt
-    @echo "🔍 Running linter..."
+lint-check: _check-tilt
+    @echo "🔍 Running lint check"
     {{kubexec}} -- npm run lint
-
-lint-fix: _check-tilt
-    @echo "🔧 Fixing linting issues..."
-    {{kubexec}} -- npm run lint:fix
-
-format: _check-tilt
-    @echo "💅 Formatting code..."
-    {{kubexec}} -- npm run format
 
 format-check: _check-tilt
     @echo "✅ Checking code formatting..."
     {{kubexec}} -- npm run format:check
 
-check: _check-tilt
+combined-check: _check-tilt
     @echo "🔍 Running Biome check..."
     {{kubexec}} -- npm run check
-
-check-fix: _check-tilt
-    @echo "🔧 Fixing Biome issues..."
-    {{kubexec}} -- npm run check:fix
 
 # Type checking with Tilt
 type-check: _check-tilt

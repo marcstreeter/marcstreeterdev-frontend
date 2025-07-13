@@ -19,7 +19,6 @@ const getEnvVar = (key: string, defaultValue: string): string => {
   return import.meta.env[key] || defaultValue;
 };
 
-
 const settings: Settings = {
   api: {
     baseUrl: getEnvVar('VITE_API_BASE_URL', 'https://marcstreeter.dev'),
@@ -31,8 +30,8 @@ const settings: Settings = {
   apiUrl: (endpoint: string): string => {
     const cleanEndpoint = endpoint.startsWith('/') ? endpoint : `/${endpoint}`;
     return `${settings.api.baseUrl}${cleanEndpoint}`;
-  }
+  },
 };
 
 // Export individual settings for convenience
-export const { api, app, apiUrl } = settings; 
+export const { api, app, apiUrl } = settings;

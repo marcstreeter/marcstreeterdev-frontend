@@ -1,6 +1,6 @@
-import React from 'react';
 import { render, screen } from '@testing-library/react';
-import { describe, it, expect } from 'vitest';
+import React from 'react';
+import { describe, expect, it } from 'vitest';
 import { ThemeProvider } from '../ThemeProvider';
 import { Button } from './Button';
 
@@ -11,12 +11,16 @@ const renderWithTheme = (component: React.ReactElement) => {
 describe('Button', () => {
   it('renders with children', () => {
     renderWithTheme(<Button>Click me</Button>);
-    expect(screen.getByRole('button', { name: 'Click me' })).toBeInTheDocument();
+    expect(
+      screen.getByRole('button', { name: 'Click me' })
+    ).toBeInTheDocument();
   });
 
   it('shows loading state', () => {
     renderWithTheme(<Button loading>Submit</Button>);
-    expect(screen.getByRole('button', { name: 'Loading...' })).toBeInTheDocument();
+    expect(
+      screen.getByRole('button', { name: 'Loading...' })
+    ).toBeInTheDocument();
     expect(screen.getByRole('button')).toBeDisabled();
   });
 
@@ -35,4 +39,4 @@ describe('Button', () => {
     renderWithTheme(<Button ref={ref}>Click me</Button>);
     expect(ref.current).toBeInstanceOf(HTMLButtonElement);
   });
-}); 
+});

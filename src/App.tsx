@@ -1,14 +1,25 @@
-import { useState } from 'react';
-import { Routes, Route, useNavigate } from 'react-router-dom';
-import {
-  Container, Typography, Box, AppBar, Toolbar, Button as MuiButton,
-  IconButton, Drawer, List, ListItem, ListItemButton, ListItemText, useMediaQuery
-} from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
-import { ThemeProvider } from './components/ThemeProvider';
+import {
+  AppBar,
+  Box,
+  Container,
+  Drawer,
+  IconButton,
+  List,
+  ListItem,
+  ListItemButton,
+  ListItemText,
+  Button as MuiButton,
+  Toolbar,
+  Typography,
+  useMediaQuery,
+} from '@mui/material';
 import { useTheme } from '@mui/material/styles';
+import { useState } from 'react';
+import { Route, Routes, useNavigate } from 'react-router-dom';
 import { Button } from './components/Button';
 import { Card } from './components/Card';
+import { ThemeProvider } from './components/ThemeProvider';
 import StatusPage from './pages/StatusPage';
 
 function App() {
@@ -29,9 +40,15 @@ function App() {
         <Typography variant="h3" component="h1" gutterBottom align="center">
           Marc Streeter Dev Frontend
         </Typography>
-        <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', md: '1fr 1fr' }, gap: 3 }}>
-          <Card 
-            title="Button Component" 
+        <Box
+          sx={{
+            display: 'grid',
+            gridTemplateColumns: { xs: '1fr', md: '1fr 1fr' },
+            gap: 3,
+          }}
+        >
+          <Card
+            title="Button Component"
             subtitle="Custom MUI Button with loading state"
           >
             <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap' }}>
@@ -41,38 +58,25 @@ function App() {
               <Button variant="outlined" color="secondary">
                 Secondary Button
               </Button>
-              <Button loading>
-                Loading Button
-              </Button>
-              <Button disabled>
-                Disabled Button
-              </Button>
+              <Button loading>Loading Button</Button>
+              <Button disabled>Disabled Button</Button>
             </Box>
           </Card>
-          <Card 
-            title="Counter Example" 
+          <Card
+            title="Counter Example"
             subtitle="Interactive component demonstration"
           >
             <Typography variant="h4" gutterBottom>
               Count: {count}
             </Typography>
             <Box sx={{ display: 'flex', gap: 2 }}>
-              <Button 
-                variant="contained" 
-                onClick={() => setCount(count + 1)}
-              >
+              <Button variant="contained" onClick={() => setCount(count + 1)}>
                 Increment
               </Button>
-              <Button 
-                variant="outlined" 
-                onClick={() => setCount(count - 1)}
-              >
+              <Button variant="outlined" onClick={() => setCount(count - 1)}>
                 Decrement
               </Button>
-              <Button 
-                variant="text" 
-                onClick={() => setCount(0)}
-              >
+              <Button variant="text" onClick={() => setCount(0)}>
                 Reset
               </Button>
             </Box>
@@ -84,8 +88,18 @@ function App() {
 
   return (
     <ThemeProvider>
-      <Box sx={{ minHeight: '100vh', display: 'grid', gridTemplateRows: 'auto 1fr' }}>
-        <AppBar position="static" elevation={0} sx={{ width: '100vw', left: 0 }}>
+      <Box
+        sx={{
+          minHeight: '100vh',
+          display: 'grid',
+          gridTemplateRows: 'auto 1fr',
+        }}
+      >
+        <AppBar
+          position="static"
+          elevation={0}
+          sx={{ width: '100vw', left: 0 }}
+        >
           <Toolbar sx={{ minHeight: 48 }}>
             <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
               Marc Streeter Dev
@@ -107,17 +121,27 @@ function App() {
                 >
                   <List sx={{ width: 200 }}>
                     <ListItem disablePadding>
-                      <ListItemButton onClick={() => handleNav('/')}> <ListItemText primary="Home" /> </ListItemButton>
+                      <ListItemButton onClick={() => handleNav('/')}>
+                        {' '}
+                        <ListItemText primary="Home" />{' '}
+                      </ListItemButton>
                     </ListItem>
                     <ListItem disablePadding>
-                      <ListItemButton onClick={() => handleNav('/status')}> <ListItemText primary="API Status" /> </ListItemButton>
+                      <ListItemButton onClick={() => handleNav('/status')}>
+                        {' '}
+                        <ListItemText primary="API Status" />{' '}
+                      </ListItemButton>
                     </ListItem>
                   </List>
                 </Drawer>
               </>
             ) : (
               <>
-                <MuiButton color="inherit" onClick={() => navigate('/')} sx={{ mr: 1 }}>
+                <MuiButton
+                  color="inherit"
+                  onClick={() => navigate('/')}
+                  sx={{ mr: 1 }}
+                >
                   Home
                 </MuiButton>
                 <MuiButton color="inherit" onClick={() => navigate('/status')}>
@@ -130,7 +154,14 @@ function App() {
         <Box>
           <Routes>
             <Route path="/" element={<HomePage />} />
-            <Route path="/status" element={<Container maxWidth="md" sx={{ mt: 2 }}><StatusPage /></Container>} />
+            <Route
+              path="/status"
+              element={
+                <Container maxWidth="md" sx={{ mt: 2 }}>
+                  <StatusPage />
+                </Container>
+              }
+            />
           </Routes>
         </Box>
       </Box>

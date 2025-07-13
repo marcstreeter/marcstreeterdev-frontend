@@ -68,4 +68,4 @@ export const Disabled: Story = {
     children: 'Disabled Button',
     disabled: true,
   },
-}; 
+};
