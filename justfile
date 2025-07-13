@@ -71,7 +71,7 @@ test: _check-tilt
 
 test-watch: _check-tilt
     @echo "🧪 Running tests in watch mode..."
-    {{kubexec}} -- npm run test:ui
+    {{kubexec}} -- npm run test:watch
 
 test-coverage: _check-tilt
     @echo "🧪 Running tests with coverage..."
