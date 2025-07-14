@@ -14,6 +14,7 @@ const dirname =
 
 // More info at: https://storybook.js.org/docs/next/writing-tests/integrations/vitest-addon
 export default defineConfig({
+  base: '/marcstreeterdev-frontend/', // Set base for GitHub Pages
   plugins: [react()],
   server: {
     port: 3000,
