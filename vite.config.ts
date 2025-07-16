@@ -1,3 +1,4 @@
+/// <reference types="node" />
 /// <reference types="vitest/config" />
 
 // https://vite.dev/config/
@@ -14,7 +15,7 @@ const dirname =
 
 // More info at: https://storybook.js.org/docs/next/writing-tests/integrations/vitest-addon
 export default defineConfig({
-  base: '/marcstreeterdev-frontend/', // Set base for GitHub Pages
+  base: process.env.VITE_BASE_PATH || '/', // Allow customization during build
   plugins: [react()],
   server: {
     port: 3000,

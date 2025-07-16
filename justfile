@@ -94,3 +94,15 @@ combined-check: _check-tilt
 type-check: _check-tilt
     @echo "🔍 Running type check..."
     {{kubexec}} -- npm run type-check
+
+# Set or unset a custom base path variable for GitHub Pages build
+set-ghpages-custom-basepath:
+    @echo "Setting custom base path for GitHub Pages build (using GitHub CLI)..."
+    @read -p "Enter the custom base path (e.g. /custom/ or /, leave blank to unset): " custompath; \
+    if [ -z "$$custompath" ]; then \
+      uvx gh variable delete CUSTOM_BASE_PATH --confirm; \
+      echo "❌ CUSTOM_BASE_PATH unset (will use repo name by default)"; \
+    else \
+      uvx gh variable set CUSTOM_BASE_PATH --body "$$custompath"; \
+      echo "✅ CUSTOM_BASE_PATH set to '$$custompath'"; \
+    fi

@@ -61,6 +61,10 @@ jobs:
         working-directory: ${{ env.BUILD_PATH }}
 
       - name: Build with Vite
+        env:
+          # VITE_BASE_PATH uses CUSTOM_BASE_PATH repo variable if set, else defaults to repo name
+          # supports local development, default github page domain, and custom github page domains
+          VITE_BASE_PATH: ${{ vars.CUSTOM_BASE_PATH && vars.CUSTOM_BASE_PATH || format('/{0}/', github.event.repository.name) }}
         run: ${{ steps.detect-package-manager.outputs.runner }} vite build
         working-directory: ${{ env.BUILD_PATH }}
 
