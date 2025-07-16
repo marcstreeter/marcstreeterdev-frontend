@@ -9,7 +9,7 @@ if (!rootElement) throw new Error('Failed to find the root element');
 
 createRoot(rootElement).render(
   <StrictMode>
-    <HashRouter basename={import.meta.env.BASE_URL}>
+    <HashRouter>
       <App />
     </HashRouter>
   </StrictMode>
