@@ -3,7 +3,8 @@ kind: Deployment
 metadata:
   name: {{ .Chart.Name }}
   labels:
-    {{- include "marcstreeterdev-frontend.labels" . | nindent 4 }}
+    app.kubernetes.io/name: {{ .Chart.Name }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
 spec:
   {{- if not .Values.dev.enabled }}
   replicas: {{ .Values.replicaCount }}
@@ -12,11 +13,13 @@ spec:
   {{- end }}
   selector:
     matchLabels:
-      {{- include "marcstreeterdev-frontend.selectorLabels" . | nindent 6 }}
+      app.kubernetes.io/name: {{ .Chart.Name }}
+      app.kubernetes.io/instance: {{ .Release.Name }}
   template:
     metadata:
       labels:
-        {{- include "marcstreeterdev-frontend.selectorLabels" . | nindent 8 }}
+        app.kubernetes.io/name: {{ .Chart.Name }}
+        app.kubernetes.io/instance: {{ .Release.Name }}
     spec:
       containers:
         - name: {{ .Chart.Name }}
@@ -24,50 +27,28 @@ spec:
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
             - name: http
-              containerPort: {{ .Values.service.targetPort }}
+              containerPort: {{ .Values.service.app.targetPort }}
               protocol: TCP
           envFrom:
             - configMapRef:
-                name: marcstreeterdev-frontend-config
-          {{- if .Values.dev.enabled }}
+                name: {{ .Values.resources.configMapName }}
           env:
             - name: APP_ENV
-              value: "development"
-          {{- end }}
-          {{- if .Values.env }}
-          env:
-            {{- range .Values.env }}
-            - name: {{ .name }}
-              value: {{ .value | quote }}
-            {{- end }}
-          {{- end }}
+              value: {{ .Values.global.environment }}
           resources:
-            {{- toYaml .Values.resources | nindent 12 }}
-          {{- if .Values.dev.enabled }}
-          livenessProbe:
-            httpGet:
-              path: /
-              port: http
-            initialDelaySeconds: 60
-            periodSeconds: 30
-            timeoutSeconds: 10
-            failureThreshold: 3
-          readinessProbe:
-            httpGet:
-              path: /
-              port: http
-            initialDelaySeconds: 30
-            periodSeconds: 10
-            timeoutSeconds: 5
-            failureThreshold: 5
-          {{- end }}
+            requests:
+              memory: {{ .Values.resources.requests.memory }}
+              cpu: {{ .Values.resources.requests.cpu }}
+            limits:
+              memory: {{ .Values.resources.limits.memory }}
+              cpu: {{ .Values.resources.limits.cpu }}
         - name: storybook
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
-          command: ["npm", "run", "storybook", "--", "--no-open", "--port", "6006", "--host", "0.0.0.0"]
+          command: ["npm", "run", "storybook", "--", "--no-open", "--port", "{{ .Values.service.storybook.port }}", "--host", "0.0.0.0"]
           ports:
             - name: storybook
-              containerPort: 6006
+              containerPort: {{ .Values.service.storybook.targetPort }}
               protocol: TCP
           resources:
             requests:
@@ -76,19 +57,3 @@ spec:
             limits:
               memory: 1Gi
               cpu: 500m
-          livenessProbe:
-            httpGet:
-              path: /
-              port: 6006
-            initialDelaySeconds: 60
-            periodSeconds: 30
-            timeoutSeconds: 10
-            failureThreshold: 3
-          readinessProbe:
-            httpGet:
-              path: /
-              port: 6006
-            initialDelaySeconds: 30
-            periodSeconds: 10
-            timeoutSeconds: 5
-            failureThreshold: 5 

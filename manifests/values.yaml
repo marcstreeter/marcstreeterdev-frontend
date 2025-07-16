@@ -14,18 +14,22 @@ image:
   tag: latest
   pullPolicy: IfNotPresent
 
-# Build arguments for Docker (development only)
-buildArgs:
-  ENABLE_TESTING: false
-  ENABLE_STORYBOOK: false
-  ENABLE_LINTING: false
-  ENABLE_DEBUG: false
+# Deployment configuration
+deployment:
+  app:
+    probePath: /marcstreeterdev-frontend/
+  storybook:
+    probePath: /marcstreeterdev-frontend/storybook
 
-# Service configuration (development only)
+# Service configuration
 service:
   type: ClusterIP
-  port: 5173
-  targetPort: 5173
+  app:
+    port: 5173
+    targetPort: 5173
+  storybook:
+    port: 6006
+    targetPort: 6006
 
 # Ingress configuration
 ingress:
@@ -41,12 +45,13 @@ ingress:
 
 # Resource limits
 resources:
+  configMapName: marcstreeterdev-frontend-config
   requests:
-    memory: 64Mi
-    cpu: 50m
+    memory: 512Mi
+    cpu: 250m
   limits:
-    memory: 128Mi
-    cpu: 100m
+    memory: 2Gi
+    cpu: 700m
 
 
 

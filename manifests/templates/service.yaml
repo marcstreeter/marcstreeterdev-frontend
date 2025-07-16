@@ -1,15 +1,17 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "marcstreeterdev-frontend.fullname" . }}
+  name: {{ .Chart.Name }}
   labels:
-    {{- include "marcstreeterdev-frontend.labels" . | nindent 4 }}
+    app.kubernetes.io/name: {{ .Chart.Name }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
 spec:
-  type: {{ .Values.service.type }}
+  type: {{ .Values.service.app.type }}
   ports:
-    - port: {{ .Values.service.port }}
+    - port: {{ .Values.service.app.port }}
       targetPort: http
       protocol: TCP
       name: http
   selector:
-    {{- include "marcstreeterdev-frontend.selectorLabels" . | nindent 4 }} 
+    app.kubernetes.io/name: {{ .Chart.Name }}
+    app.kubernetes.io/instance: {{ .Release.Name }} 
